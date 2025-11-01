@@ -8,14 +8,8 @@ export const getVoucherList = async (): Promise<VoucherSeat[]> => {
   return response.json();
 };
 
-export const getVoucherById = async (id: string): Promise<VoucherSeat> => {
-  const response = await fetch(`${API_BASE}${id}`);
-  if (!response.ok) throw new Error(`Failed to fetch voucher with id ${id}`);
-  return response.json();
-};
-
-export const createVoucher = async (data: Omit<VoucherSeat, 'id'>): Promise<VoucherSeat> => {
-  const response = await fetch(API_BASE, {
+export const checkVoucherSeat = async (data: Omit<VoucherSeat, 'id'>): Promise<VoucherSeat> => {
+  const response = await fetch(`${API_BASE}check`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -24,17 +18,16 @@ export const createVoucher = async (data: Omit<VoucherSeat, 'id'>): Promise<Vouc
   return response.json();
 };
 
-export const updateVoucher = async (id: string, data: Omit<VoucherSeat, 'id'>): Promise<VoucherSeat> => {
-  const response = await fetch(`${API_BASE}${id}`, {
-    method: 'PUT',
+export const generateVoucherSeat = async (data: Omit<VoucherSeat, 'id'>): Promise<VoucherSeat> => {
+  const response = await fetch(`${API_BASE}generate`, {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error(`Failed to update voucher with id ${id}`);
-  return response.json();
-};
+  if (!response.ok) {
+      const errorMessage = await response.json();
+      throw new Error(errorMessage.message || errorMessage.error || 'Failed to generate voucher');
+  }
 
-export const deleteVoucher = async (id: string): Promise<void> => {
-  const response = await fetch(`${API_BASE}${id}`, { method: 'DELETE' });
-  if (!response.ok) throw new Error(`Failed to delete voucher with id ${id}`);
+  return response.json();
 };
