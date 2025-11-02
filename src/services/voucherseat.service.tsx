@@ -28,6 +28,5 @@ export const generateVoucherSeat = async (data: Omit<VoucherSeat, 'id'>): Promis
       const errorMessage = await response.json();
       throw new Error(errorMessage.message || errorMessage.error || 'Failed to generate voucher');
   }
-
   return response.json();
 };

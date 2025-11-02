@@ -22,7 +22,10 @@ export async function createFlight(data: Omit<Flight, 'id'>): Promise<Flight> {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error('Failed to create flight');
+  if (!response.ok) {
+      const errorMessage = await response.json();
+      throw new Error(errorMessage.message || errorMessage.error || 'Failed to create flight');
+  }
   return response.json();
 }
 

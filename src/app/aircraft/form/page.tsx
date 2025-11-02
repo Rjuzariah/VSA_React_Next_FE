@@ -60,7 +60,9 @@ export default function AircraftFormPage() {
 
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
         <div>
-          <label className="block mb-1 text-gray-700">Aircraft Type:</label>
+          <label className="block mb-1 text-gray-700">
+            Aircraft Type: <span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
             value={formData.aircraft_type}
@@ -70,7 +72,9 @@ export default function AircraftFormPage() {
           />
         </div>
         <div>
-          <label className="block mb-1 text-gray-700">Number of Rows:</label>
+          <label className="block mb-1 text-gray-700">
+            Number of Rows: <span className="text-red-500">*</span>
+            </label>
           <input
             type="number"
             value={formData.num_rows}
@@ -81,10 +85,13 @@ export default function AircraftFormPage() {
           />
         </div>
         <div>
-          <label className="block mb-1 text-gray-700">Seats Per Row:</label>
+          <label className="block mb-1 text-gray-700">
+            Seats Per Row:
+            <span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
-            value={formData.seats_per_row}
+            value={formData.seats_per_row?.toUpperCase()}
             onChange={(e) => setFormData({...formData, seats_per_row: e.target.value})}
             className="border p-2 w-full rounded"
             placeholder="e.g., ABCDEF"

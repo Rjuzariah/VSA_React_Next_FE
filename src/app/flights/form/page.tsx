@@ -16,6 +16,8 @@ export default function FlightFormPage() {
     aircraft_id: '',
   });
   const [aircraft, setAircraft] = useState<Aircraft[]>([]);
+  const [error, setError] = useState<string>('');
+
 
   useEffect(() => {
     fetchAircraft();
@@ -53,7 +55,7 @@ export default function FlightFormPage() {
         await createFlight(formattedData as Omit<Flight, 'id'>);
       } router.push('/flights');
     } catch (err) {
-      console.error(err);
+      setError(err.message);
     }
   };
 
@@ -66,17 +68,17 @@ export default function FlightFormPage() {
 
       <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
         <div>
-          <label className="block mb-1 text-gray-700">Flight Number:</label>
-          <input type="text" value={formData.flight_number || ''} onChange={(e) => setFormData({...formData, flight_number: e.target.value})} className="border p-2 w-full rounded" required />
+          <label className="block mb-1 text-gray-700">Flight Number: <span className="text-red-500">*</span></label>
+          <input type="text" value={formData.flight_number.toUpperCase() || ''} onChange={(e) => setFormData({...formData, flight_number: e.target.value})} className="border p-2 w-full rounded" required />
         </div>
 
         <div>
-          <label className="block mb-1 text-gray-700">Flight Date:</label>
+          <label className="block mb-1 text-gray-700">Flight Date: <span className="text-red-500">*</span></label>
           <input type="date" value={formData.flight_date ? formData.flight_date.split('T')[0] : ''} onChange={(e) => setFormData({...formData, flight_date: e.target.value})} className="border p-2 w-full rounded" required />
         </div>
         
         <div>
-          <label className="block mb-1 text-gray-700">Aircraft:</label>
+          <label className="block mb-1 text-gray-700">Aircraft: <span className="text-red-500">*</span></label>
           <select value={formData.aircraft_id || ''} onChange={(e) => setFormData({...formData, aircraft_id: Number(e.target.value)})} className="border p-2 w-full rounded">
             <option value="">Select Aircraft</option>
             {aircraft.map(a => (
@@ -88,6 +90,15 @@ export default function FlightFormPage() {
           <button type="submit" className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">{id ? 'Update' : 'Create'} Flight</button>
           <button type="button" onClick={() => router.push('/flights')} className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">Cancel</button>
         </div>
+
+        {error && (
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-red-300 bg-red-50 p-3 text-red-700">
+            <i className="bi bi-exclamation-circle-fill text-red-500 text-xl"></i>
+            <span>{error}</span>
+          </div>
+        )}
+
+
       </form>
     </div>
   );

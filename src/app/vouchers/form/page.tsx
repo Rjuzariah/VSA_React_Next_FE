@@ -13,10 +13,12 @@ export default function VoucherFormPage() {
 
   const [formData, setFormData] = useState<Partial<VoucherSeat>>({});
   const [error, setError] = useState<string>('');
+  const [warning, setWarning] = useState('');
 
   const checkVoucher = async () => {
 
     setError('');
+    setWarning('');
 
     try {
       const formattedData = {
@@ -24,15 +26,9 @@ export default function VoucherFormPage() {
         flight_date: new Date(formData.flight_date).toISOString(),
       };
       const data = await checkVoucherSeat(formattedData as Omit<VoucherSeat, 'id'>);
-      setFormData({
-        ...formData,
-        seat1: data.random_seat?.[0] || "",
-        seat2: data.random_seat?.[1] || "",
-        seat3: data.random_seat?.[2] || "",
-      });
 
       if (data.exists) {
-        setError('You Have generated a voucher for this flight. Please check your voucher details.');
+        setWarning('You Have generated a voucher for this flight. Please check on voucher list page.');
       }
       if (!data.exists) {
         setError('You have not generated a voucher for this flight yet. Please generate by clicking the Generate Voucher button.');
@@ -52,11 +48,12 @@ export default function VoucherFormPage() {
         flight_date: new Date(formData.flight_date).toISOString(),
       };
       const data = await generateVoucherSeat(formattedData as Omit<VoucherSeat, 'id'>);
+      console.log(data.seats);
       setFormData({
         ...formData,
-        seat1: data.random_seat?.[0] || "",
-        seat2: data.random_seat?.[1] || "",
-        seat3: data.random_seat?.[2] || "",
+        seat1: data.seats?.[0] || "",
+        seat2: data.seats?.[1] || "",
+        seat3: data.seats?.[2] || "",
       });
       
     } catch (err) {
@@ -73,19 +70,19 @@ export default function VoucherFormPage() {
 
       <form className="max-w-2xl mx-auto space-y-4">
         <div>
-          <label className="block mb-1 text-gray-700">Crew ID:</label>
-          <input type="text" value={formData.crew_id || ''} onChange={(e) => setFormData({...formData, crew_id: e.target.value})} className="border p-2 w-full rounded" required />
+          <label className="block mb-1 text-gray-700">Crew ID: <span className="text-red-500">*</span></label>
+          <input type="text" value={formData.crew_id?.toUpperCase() || ''} onChange={(e) => setFormData({...formData, crew_id: e.target.value})} className="border p-2 w-full rounded" required />
         </div>
         <div>
           <label className="block mb-1 text-gray-700">Crew Name:</label>
           <input type="text" value={formData.crew_name || ''} onChange={(e) => setFormData({...formData, crew_name: e.target.value})} className="border p-2 w-full rounded" />
         </div>
         <div>
-          <label className="block mb-1 text-gray-700">Flight Number:</label>
-          <input type="text" value={formData.flight_number || ''} onChange={(e) => setFormData({...formData, flight_number: e.target.value})} className="border p-2 w-full rounded" required />
+          <label className="block mb-1 text-gray-700">Flight Number: <span className="text-red-500">*</span></label>
+          <input type="text" value={formData.flight_number?.toUpperCase() || ''} onChange={(e) => setFormData({...formData, flight_number: e.target.value})} className="border p-2 w-full rounded" required />
         </div>
         <div>
-          <label className="block mb-1 text-gray-700">Flight Date:</label>
+          <label className="block mb-1 text-gray-700">Flight Date: <span className="text-red-500">*</span></label>
           <input type="date" value={formData.flight_date ? formData.flight_date.split('T')[0] : ''} onChange={(e) => setFormData({...formData, flight_date: e.target.value})} className="border p-2 w-full rounded" required />
         </div>
         <div>
@@ -98,7 +95,7 @@ export default function VoucherFormPage() {
               className="border p-1 w-16 text-center rounded text-sm"
               placeholder='Seat 1'
               required
-              readOnly
+              
             />
             <input
               type="text"
@@ -107,7 +104,7 @@ export default function VoucherFormPage() {
               className="border p-1 w-16 text-center rounded text-sm"
               placeholder='Seat 2'
               required
-              readOnly
+              
             />
             <input
               type="text"
@@ -116,8 +113,10 @@ export default function VoucherFormPage() {
               className="border p-1 w-16 text-center rounded text-sm"
               placeholder='Seat 3'
               required
-              readOnly
+              
             />
+            { formData.seat1 && formData.seat2 && formData.seat3 && (<span className="text-green-600 font-semibold">Seat Assigned</span>
+            )}
             
           </div>
 
@@ -133,16 +132,23 @@ export default function VoucherFormPage() {
           <button
               type="button"
               onClick={generateVoucher}
-              className="bg-green-500 text-white px-3 py-1.5 rounded hover:bg-green-600 text-sm"
-            >
+              className="bg-green-500 text-white px-3 py-1.5 rounded hover:bg-green-600 text-sm">
               Generate Voucher
             </button>
         </div>
-        <div className="container mx-auto p-4">
-          {/* ... rest of your form */}
-          {error && <p className="text-red-500">{error}</p>}
-          {/* ... rest of your form */}
-        </div>
+        {error && (
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-red-300 bg-red-50 p-3 text-red-700">
+            <i className="bi bi-exclamation-circle-fill text-red-500 text-xl"></i>
+            <span>{error}</span>
+          </div>
+        )}
+        {warning && (
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-yellow-300 bg-yellow-50 p-3 text-yellow-700">
+            <i className="bi bi-exclamation-circle-fill text-yellow-500 text-xl"></i>
+            <span>{warning}</span>
+          </div>
+        )}
+
       </form>
     </div>
   );
