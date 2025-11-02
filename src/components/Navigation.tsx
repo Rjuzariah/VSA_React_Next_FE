@@ -37,17 +37,7 @@ export default function Navigation() {
                     : 'border-transparent text-gray-600 hover:border-gray-300 hover:text-blue-500'
                 }`}
               >
-                Aircraft
-              </Link>
-              <Link
-                href="/flights"
-                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
-                  isActive('/flights')
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-600 hover:border-gray-300 hover:text-blue-500'
-                }`}
-              >
-                Flights
+                Aircrafts
               </Link>
               <Link
                 href="/vouchers"

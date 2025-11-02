@@ -4,18 +4,32 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { VoucherSeat } from '@/interfaces';
 import { getVoucherList,  } from '@/services/voucherseat.service';  
+import { getAircraftList } from '@/services/aircraft.service';
 
 export default function VouchersPage() {
   const [vouchers, setVouchers] = useState<VoucherSeat[]>([]);
+  const [aircraft, setAircraft] = useState<Aircraft[]>([]);
 
   useEffect(() => {
     fetchVouchers();
+    if (!aircraft.length && vouchers.length>0){
+      fetchAircraft();
+    }
   }, []);
 
   const fetchVouchers = async () => {
     try {
       const data = await getVoucherList();
       setVouchers(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchAircraft = async () => {
+    try {
+      const data = await getAircraftList();
+      setAircraft(data);
     } catch (err) {
       console.error(err);
     }
@@ -37,6 +51,7 @@ export default function VouchersPage() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Crew Name</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flight Number</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flight Date</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aircraft</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Seat</th>
             </tr>
           </thead>
@@ -47,14 +62,15 @@ export default function VouchersPage() {
                 <td className="px-6 py-4 whitespace-nowrap text-gray-900">{v.crew_name}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-900">{v.flight_number}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-900">{v.flight_date ? v.flight_date.split('T')[0] : ''}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-gray-900">{v.aircraft_type}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                  <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded mr-2">
+                  <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded mr-2">
                     {v.seat1}
                   </span>
-                  <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded mr-2">
+                  <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded mr-2">
                     {v.seat2}
                   </span>
-                  <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                  <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded">
                     {v.seat3}
                   </span>
                 </td>

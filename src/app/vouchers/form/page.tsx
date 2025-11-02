@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { checkVoucherSeat, generateVoucherSeat } from '@/services/voucherseat.service';
 import { VoucherSeat, Flight } from '@/interfaces';
+import { getAircraftList } from '@/services/aircraft.service';
+
 
 
 export default function VoucherFormPage() {
@@ -14,6 +16,20 @@ export default function VoucherFormPage() {
   const [formData, setFormData] = useState<Partial<VoucherSeat>>({});
   const [error, setError] = useState<string>('');
   const [warning, setWarning] = useState('');
+  const [aircraft, setAircraft] = useState<Aircraft[]>([]);
+
+  useEffect(() => {
+    fetchAircraft();
+  }, []);
+
+  const fetchAircraft = async () => {
+    try {
+      const data = await getAircraftList();
+      setAircraft(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const checkVoucher = async () => {
 
@@ -31,7 +47,7 @@ export default function VoucherFormPage() {
         setWarning('You Have generated a voucher for this flight. Please check on voucher list page.');
       }
       if (!data.exists) {
-        setError('You have not generated a voucher for this flight yet. Please generate by clicking the Generate Voucher button.');
+        setWarning('You have not generated a voucher for this flight yet. Please generate by clicking the Generate Voucher button.');
       }
       
     } catch (err) {
@@ -86,6 +102,15 @@ export default function VoucherFormPage() {
           <input type="date" value={formData.flight_date ? formData.flight_date.split('T')[0] : ''} onChange={(e) => setFormData({...formData, flight_date: e.target.value})} className="border p-2 w-full rounded" required />
         </div>
         <div>
+          <label className="block mb-1 text-gray-700">Aircraft: <span className="text-red-500">*</span></label>
+          <select value={formData.aircraft_type_key || ''} onChange={(e) => setFormData({...formData, aircraft_type_key: e.target.value})} className="border p-2 w-full rounded">
+            <option value="">Select Aircraft</option>
+            {aircraft.map(a => (
+              <option key={a.aircraft_type_key} value={a.aircraft_type_key}>{a.aircraft_type}</option>
+            ))}
+          </select>
+        </div>
+        <div>
           <label className="block mb-1 text-gray-700">Seat Number:</label>
           <div className="flex items-center space-x-2">
             <input
@@ -95,6 +120,7 @@ export default function VoucherFormPage() {
               className="border p-1 w-16 text-center rounded text-sm"
               placeholder='Seat 1'
               required
+              readOnly
               
             />
             <input
@@ -104,6 +130,7 @@ export default function VoucherFormPage() {
               className="border p-1 w-16 text-center rounded text-sm"
               placeholder='Seat 2'
               required
+              readOnly
               
             />
             <input
@@ -113,6 +140,7 @@ export default function VoucherFormPage() {
               className="border p-1 w-16 text-center rounded text-sm"
               placeholder='Seat 3'
               required
+              readOnly
               
             />
             { formData.seat1 && formData.seat2 && formData.seat3 && (<span className="text-green-600 font-semibold">Seat Assigned</span>

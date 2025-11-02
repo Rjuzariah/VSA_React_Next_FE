@@ -15,7 +15,7 @@ export default function Home() {
 
           <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <p className="text-base leading-relaxed">
-              💡 The system comes with <span className="font-semibold">default data</span> for aircraft and flights, so you can get started right away.
+              💡 The system comes with <span className="font-semibold">default data</span> for aircraft, so you can get started right away.
             </p>
           </div>
 
@@ -24,11 +24,7 @@ export default function Home() {
             <Link href="/aircraft" className="font-semibold text-blue-600 hover:underline">
               Aircraft
             </Link>{" "}
-            and{" "}
-            <Link href="/flights" className="font-semibold text-blue-600 hover:underline">
-              Flights
-            </Link>{" "}
-            pages before moving on to{" "}
+            page before moving on to{" "}
             <Link href="/vouchers" className="font-semibold text-blue-600 hover:underline">
               Voucher Seat Assignment
             </Link>
