@@ -47,6 +47,12 @@ export default function VoucherFormPage() {
         setWarning('You Have generated a voucher for this flight. Please check on voucher list page.');
       }
       if (!data.exists) {
+        setFormData({
+          ...formData,
+          seat1: "",
+          seat2: "",
+          seat3: "",
+        });
         setWarning('You have not generated a voucher for this flight yet. Please generate by clicking the Generate Voucher button.');
       }
       
