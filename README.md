@@ -1,7 +1,7 @@
-VSA_REACT_NEXT_FE is a React Next.js application that provides a web interface for VSA (Voucher Seat Allocation). It allows users to manage vouchers, allocate seats, and perform various voucher-related operations.
+VSA_REACT_NEXT_FE is a React Next.js application that provides a web interface for VSA (Voucher Seat Assignment). It allows users to manage Aricraft and allocate voucher seats.
 
 ## Feature
-- Manage Flight
+- Manage Aircraft
 - Generate Voucher Seat
 
 ## Prerequisites
