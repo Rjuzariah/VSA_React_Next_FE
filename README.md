@@ -19,7 +19,7 @@ To get started with the project, follow these steps:
 git clone https://github.com/Rjuzariah/VSA_React_Next_FE.git
 
 2. Install Depedencies
-cd VSA_REACT_NEXT_FE
+cd frontend/VSA_REACT_NEXT_FE
 npm install
 
 3. Start Development
