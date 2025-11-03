@@ -15,7 +15,7 @@ export default function Home() {
 
           <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <p className="text-base leading-relaxed">
-              💡 The system comes with <span className="font-semibold">default data</span> for aircraft, so you can get started right away.
+              💡 The system comes with <span className="font-semibold">default data</span> for aircraft and voucher, so you can get started right away.
             </p>
           </div>
 

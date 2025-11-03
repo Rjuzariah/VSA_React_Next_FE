@@ -57,6 +57,7 @@ export default function VoucherFormPage() {
 
   const generateVoucher = async () => {
     setError('');
+    setWarning('');
 
     try {
       const formattedData = {
